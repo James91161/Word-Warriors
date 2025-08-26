@@ -1,5 +1,5 @@
 // ===== Questions =====
-// Start with Easy questions in English and Afrikaans
+// Only a few examples included here; expand as needed
 const questions = {
   english: {
     easy: [
@@ -7,7 +7,13 @@ const questions = {
       {question:"What are the names of Isaac's sons?", options:["Abel & Cain","Shem, Ham & Japheth","Esau & Jacob","Manasseh & Ephraim"], answer:2, verse:"Genesis 25:24-26"},
       {question:"What did God write on the stone tablets?", options:["7 Laws","10 Commandments","7 Commandments","12 Ceremonial Laws"], answer:1, verse:"Exodus 31:18"},
       {question:"Which city was conquered by the Israelites by marching around it for 7 days?", options:["Midian","Jericho","Canaan","Jerusalem"], answer:1, verse:"Joshua 5:13-6:27"}
-      // Add remaining Easy questions here...
+      // Add more questions here...
+    ],
+    medium: [
+      // Add 25 medium questions here
+    ],
+    hard: [
+      // Add 25 hard questions here
     ]
   },
   afrikaans: {
@@ -16,7 +22,13 @@ const questions = {
       {question:"Wat is die name van Isak se seuns?", options:["Abel & Kain","Sem, Cham & Jafet","Esau & Jakob","Manasse & Efraim"], answer:2, verse:"Genesis 25:24-26"},
       {question:"Wat het God op die kliptafels geskryf?", options:["7 wette","10 Gebooie","7 Gebooie","12 Seremonieë wette"], answer:1, verse:"Eksodus 31:18"},
       {question:"Watter stad is deur die Israeliete verower deur 7 dae rondom dit te marsjeer?", options:["Midian","Jerigo","Kanaän","Jerusalem"], answer:1, verse:"Josua 5:13-6:27"}
-      // Add remaining Easy questions here...
+      // Add more questions here...
+    ],
+    medium: [
+      // Add 25 medium questions here
+    ],
+    hard: [
+      // Add 25 hard questions here
     ]
   }
 };
@@ -58,10 +70,9 @@ function startGame() {
 }
 
 function loadSessionQuestions() {
-  // Shuffle and pick 25 questions
-  sessionQuestions = [...questions[currentLanguage][difficulty]];
-  sessionQuestions.sort(() => Math.random() - 0.5);
-  sessionQuestions = sessionQuestions.slice(0,25);
+  let allQuestions = [...questions[currentLanguage][difficulty]];
+  allQuestions.sort(() => Math.random() - 0.5); // shuffle
+  sessionQuestions = allQuestions.slice(0, Math.min(25, allQuestions.length)); // pick 25 or fewer
   questionIndex = 0;
   score = 0;
   scoreSpan.textContent = score;
@@ -88,17 +99,32 @@ function checkAnswer(selected) {
 
 function endGame() {
   restartBtn.style.display = "block";
-  saveScore();
+  saveSessionScore();
   showLeaderboard();
-  if(score === 25){ medal.style.display = "block"; }
+
+  // Show medal if cumulative correct answers ≥ threshold
+  const usersData = JSON.parse(localStorage.getItem("usersData") || "{}");
+  if(usersData[playerName] && usersData[playerName].cumulativeScore >= 50){
+    medal.style.display = "block";
+  } else {
+    medal.style.display = "none";
+  }
 }
 
-function saveScore() {
-  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")||"[]");
+function saveSessionScore() {
+  // Update leaderboard for this session
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
   const now = new Date();
-  leaderboard.push({name:playerName, score:score, date:now.toLocaleDateString(), time:now.toLocaleTimeString()});
-  leaderboard.sort((a,b) => b.score-a.score || a.time.localeCompare(b.time));
+  leaderboard.push({name: playerName, score: score, date: now.toLocaleDateString(), time: now.toLocaleTimeString()});
+  leaderboard.sort((a, b) => b.score - a.score || a.time.localeCompare(b.time));
   localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+  // Update cumulative score per user
+  const usersData = JSON.parse(localStorage.getItem("usersData") || "{}");
+  if(!usersData[playerName]) usersData[playerName] = {cumulativeScore: 0};
+  usersData[playerName].cumulativeScore += score;
+  usersData[playerName].lastSession = now.toISOString();
+  localStorage.setItem("usersData", JSON.stringify(usersData));
 }
 
 function showLeaderboard() {
