@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Trivia Game</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+  }
+  h1, h2, h3 { margin: 10px; }
+  #game { display: none; flex-direction: column; align-items: center; }
+  button {
+    margin: 8px 0;
+    padding: 15px 25px;
+    font-size: 18px;
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+  }
+  input, select { padding: 10px; margin: 5px 0; font-size:16px; width: 90%; max-width: 400px; }
+  #leaderboard table { width: 100%; max-width: 500px; margin:auto; border-collapse: collapse; overflow-x:auto; display:block; }
+  #leaderboard table th, #leaderboard table td { border:1px solid #333; padding: 5px; }
+  @media (max-width: 400px){
+    body { font-size:14px; }
+    button { font-size:16px; padding:12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Bible Trivia Game</h1>
+
+<div id="setup">
+  <input type="text" id="playerName" placeholder="Enter your name" required><br>
+  <select id="languageSelect">
+    <option value="english">English</option>
+    <option value="afrikaans">Afrikaans</option>
+  </select><br>
+  <select id="difficultySelect">
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select><br>
+  <button id="startBtn">Start Game</button>
+</div>
+
+<div id="game">
+  <h2 id="questionText"></h2>
+  <div id="options">
+    <button class="optionBtn"></button>
+    <button class="optionBtn"></button>
+    <button class="optionBtn"></button>
+    <button class="optionBtn"></button>
+  </div>
+  <p>Score: <span id="score">0</span></p>
+  <p id="medal" style="display:none;">🏅 You completed all 100 questions!</p>
+  <button id="restartBtn" style="display:none;">Restart</button>
+</div>
+
+<div id="leaderboard">
+  <h3>Leaderboard</h3>
+  <table id="leaderboardTable"></table>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
