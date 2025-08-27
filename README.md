@@ -1,2 +1,22 @@
-# Word-Warriors
-Word Warriors is an exciting Bible quiz with more than 300 questions in English and Afrikaans. Test your knowledge of scripture, climb the leaderboard, and enjoy fun competition with family, friends, or church groups. Every round is randomized for a fresh challenge!
+# 📖 Bible Quiz App
+
+A progressive Bible trivia game built with **React + Vite**.  
+Questions are stored in `public/questions.json`, so you can update them directly.
+
+## 🚀 Run Locally
+```bash
+npm install
+npm run dev
+```
+
+## 📦 Build
+```bash
+npm run build
+```
+
+## 🌍 Deploy
+- Push to GitHub.
+- Host on **Vercel**, **Netlify**, or **GitHub Pages**.
+
+## ✍️ Adding Questions
+Edit `public/questions.json` and redeploy.
